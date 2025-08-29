@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatty Titus</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Tambahkan di bagian <style> */
+        @media (max-width: 600px) {
+            .chatUtama {
+                flex-direction: column;
+                width: 100%;
+                padding: 0;
+            }
+
+            .mainInput {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .layer {
+                width: 100%;
+                padding: 5px;
+            }
+        }
+
+        body {
+            background-color: rgb(211, 207, 207);
+            font-family: Arial, sans-serif;
+        }
+
+        .layer {
+            width: 70%;
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatUtama {
+            width: 70%;
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.1);
+
+            justify-content: space-between;
+        }
+
+        .chat {
+            height: 300px;
+            overflow-y: auto;
+            border-bottom: 2px solid #ddd;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+
+        .left {
+            background: #e0e0e0;
+            text-align: left;
+            align-self: flex-start;
+        }
+
+        .right {
+            background: aqua;
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .msg {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+        }
+
+        .msg strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mainInput input {
+            padding: 2px;
+        }
+
+        button {
+            display: block;
+            margin: 50px;
+            background-color: rgb(178, 178, 255);
+            border-radius: 3px
+        }
+
+        button:hover {
+            display: block;
+            margin: 50px;
+            background-color: rgb(211, 160, 160);
+        }
+
+        textarea {
+            display: block;
+            max-width: fit-content;
+        }
+
+        .box-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            resize: vertical;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+
+<!-- BODY -->
+
+<body>
+    <h1 style="text-align: center;">Chatty</h1>
+
+    <hr>
+    <div class="layer">
+        <div class="chat" id="chat"></div>
+
+
+        <!-- Chatnya -->
+        <div class="chatUtama" id="inputMsg">
+            <div class="mainInput" id="leftMsg">
+                <p>Name</p>
+                <input type="text" placeholder="Your Name" id="inputLeft" class="box-input">
+                <p>Message</p>
+                <textarea name="chatLeft" id="msgLeft" class="box-input"></textarea>
+                <button id="clickLeft">Send</button>
+            </div>
+            <div class="mainInput" id="rightMsg">
+                <p>Name</p>
+                <input type="text" value="Me" class="box-input" id="inputRight" readonly>
+                <p>Message</p>
+                <textarea name="chatRight" id="msgRight" class="box-input"></textarea>
+                <button id="clickRight">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMsg(name, message, side) {
+            if (message.trim() === "") return;
+            if (name.trim() === "") {
+                alert("Masukan Nama Kamu!!!!");
+                return;
+            }
+            let classMsg = side === "right" ? "right" : "left";
+            let upMessage = `<div class = 'msg ${classMsg}'><strong>${name}</strong>${message}</div>`;
+            $("#chat").append(upMessage);
+            $("#chat").scrollTop($("#chat")[0].scrollHeight);
+        }
+
+        $(document).ready(function () {
+            $("#clickRight").click(function () {
+                sendMsg($("#inputRight").val(), $("#msgRight").val(), "right");
+                $("#msgRight").val("");
+            });
+            $("#clickLeft").click(function () {
+                sendMsg($("#inputLeft").val(), $("#msgLeft").val(), "left");
+                $("#msgLeft").val("");
+            });
+
+            $("#msgRight").keydown(function (a) {
+                if (a.keyCode === 13 && !a.shiftKey) {
+                    a.preventDefault();
+                    $("#clickRight").click();
+                }
+            });
+
+            $("#msgLeft").keydown(function (a) {
+                if (a.keyCode == 13 && !a.shiftKey) {
+                    a.preventDefault();
+                    $("#clickLeft").click();
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>
